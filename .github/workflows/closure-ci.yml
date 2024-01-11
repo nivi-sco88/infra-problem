@@ -22,7 +22,7 @@ jobs:
       - name: Install Leiningen
         run: |
           wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -O /usr/local/bin/lein
-          chmod -R +x /usr/local/bin/lein
+          sudo chmod +x /usr/local/bin/lein
 
       - name: Build and Test
         run: |
