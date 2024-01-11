@@ -26,8 +26,8 @@ jobs:
 
       - name: Change to Project Directory
         run: |
-            pwd
-            cd ./front-end
+            ls -lrt
+            cd front-end
 
       - name: Build and Test
         run: |
