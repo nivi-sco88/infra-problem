@@ -2,7 +2,7 @@
   :description "Front-end webapp for assessment"
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/data.json "0.2.6"]
-                 [com.thoughtworks/common-utils "0.1.0-SNAPSHOT"]
+                 [thoughtworks/clj-mdc "0.1.0-SNAPSHOT"]
                  [compojure "1.6.1"]
                  [hiccup "1.0.5"]
                  [http-kit "2.4.0-alpha6"]

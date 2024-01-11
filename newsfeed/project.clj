@@ -3,7 +3,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/data.json "0.2.6"]
                  [compojure "1.6.1"]
-                 [com.thoughtworks/common-utils "0.1.0-SNAPSHOT"]
+                 [thoughtworks/clj-mdc "0.1.0-SNAPSHOT"]
                  [http-kit "2.4.0-alpha6"]
                  [org.clojars.scsibug/feedparser-clj "0.4.0"]
                  [org.clojure/tools.logging "0.3.1"]

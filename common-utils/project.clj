@@ -1,4 +1,4 @@
-(defproject com.thoughtworks/common-utils "0.1.0-SNAPSHOT"
+(defproject thoughtworks/clj-mdc "0.1.0-SNAPSHOT"
   :description "Common library for apps"
   :dependencies [[org.clojure/clojure "1.10.0"]]
   :profiles {:uberjar {:aot :all}

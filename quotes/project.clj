@@ -4,7 +4,7 @@
                  [org.clojure/data.json "0.2.6"]
                  [compojure "1.6.1"]
                  [http-kit "2.4.0-alpha6"]
-                 [com.thoughtworks/common-utils "0.1.0-SNAPSHOT"]
+                 [thoughtworks/clj-mdc "0.1.0-SNAPSHOT"]
                  [org.clojure/tools.logging "0.3.1"]]
   :plugins [[lein-ring "0.9.7"]]
   :ring {:handler quotes.routes/app}
