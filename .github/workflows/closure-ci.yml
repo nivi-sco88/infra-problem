@@ -24,12 +24,21 @@ jobs:
           wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -O /usr/local/bin/lein
           sudo chmod +x /usr/local/bin/lein
 
-      - name: Change to Project Directory
-        run: |           
-            cd /home/runner/work/infra-problem/infra-problem/front-end
-            pwd
+      - name: Build and Test Newsfeed
+        run: | 
+          cd /home/runner/work/infra-problem/infra-problem/newsfeed
+          pwd        
+          lein deps
+          lein test
 
-      - name: Build and Test
+      - name: Build and Test Quotes
+        run: | 
+          cd /home/runner/work/infra-problem/infra-problem/quotes
+          pwd        
+          lein deps
+          lein test
+
+      - name: Build and Test Front End
         run: | 
           cd /home/runner/work/infra-problem/infra-problem/front-end
           pwd        
