@@ -25,12 +25,11 @@ jobs:
           sudo chmod +x /usr/local/bin/lein
 
       - name: Change to Project Directory
-        run: |
-            ls -lrt
-            cd front-end
+        run: |           
+            sudo cd ./front-end
+            pwd
 
       - name: Build and Test
-        run: |
-          pwd
+        run: |         
           lein deps
           lein test
