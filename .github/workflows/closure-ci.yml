@@ -24,6 +24,13 @@ jobs:
           wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -O /usr/local/bin/lein
           sudo chmod +x /usr/local/bin/lein
 
+      - name: Build and Test Common-Utils
+        run: | 
+          cd /home/runner/work/infra-problem/infra-problem/common-utils
+          pwd        
+          lein deps
+          lein test
+
       - name: Build and Test Newsfeed
         run: | 
           cd /home/runner/work/infra-problem/infra-problem/newsfeed
