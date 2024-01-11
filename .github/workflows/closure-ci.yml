@@ -30,6 +30,7 @@ jobs:
             pwd
 
       - name: Build and Test
-        run: |         
+        run: | 
+          pwd        
           lein deps
           lein test
