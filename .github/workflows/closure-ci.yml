@@ -24,6 +24,9 @@ jobs:
           wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -O /usr/local/bin/lein
           sudo chmod +x /usr/local/bin/lein
 
+      - name: Change to Project Directory
+        run: cd front-end
+
       - name: Build and Test
         run: |
           lein deps
