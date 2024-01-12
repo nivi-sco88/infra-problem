@@ -9,15 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
+    env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+        DOCKER_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-    - name: Passing secrets
-      with: # Set the secret as an input
-            username: ${{ secrets.DOCKER_HUB_USERNAME }}
-            password: ${{ secrets.DOCKER_HUB_TOKEN }}
-        env: # Or as an environment variable
-            username: ${{ secrets.DOCKER_HUB_USERNAME }}
-            password: ${{ secrets.DOCKER_HUB_TOKEN }}
+    steps:
 
     - name: Checkout code
       uses: actions/checkout@v2
@@ -27,10 +23,7 @@ jobs:
         docker build -t web-app:latest .
 
     - name: Login to DockerHub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      run: echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
           
     - name: Push docker image      
       run: docker push web-app:latest
