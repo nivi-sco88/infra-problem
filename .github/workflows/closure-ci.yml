@@ -60,12 +60,10 @@ jobs:
             name: web-app
             path: /home/runner/work/infra-problem/infra-problem/build/
 
-      - name: Debug
+      - name: Static-assets
         run: | 
-                pwd
-                ls -lrt
-                cd build
-                ls -lrt
+                cd /home/runner/work/infra-problem/infra-problem/front-end/public
+                ./serve.py
 
         
                 
