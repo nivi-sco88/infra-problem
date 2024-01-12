@@ -9,6 +9,7 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [clojure.tools.logging :as log]
             [org.httpkit.server :refer [run-server]]))
+  :checkouts ["/home/runner/work/infra-problem/infra-problem/common-utils"]
 
 (def tokens #{"T1&eWbYXNWG1w1^YGKDPxAWJ@^et^&kX"})
 
