@@ -30,7 +30,6 @@ jobs:
           make test
           make libs
           make clean all
-          cd /home/runner/work/infra-problem/infra-problem/front-end/public
-          ./serve.py
+          
 
       
