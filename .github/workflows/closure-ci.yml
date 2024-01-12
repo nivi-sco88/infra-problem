@@ -19,9 +19,5 @@ jobs:
         docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
         docker push web-app:latest
 
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_TOKEN }}
-
     - name: Run Docker container
       run: docker run -p 8000:8000 web-app:latest
