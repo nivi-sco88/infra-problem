@@ -7,7 +7,7 @@ on:
 
 jobs:
  
-  newsfeed_build:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,9 +26,11 @@ jobs:
           sudo chmod +x /usr/local/bin/lein
       - name: Build and Test Newsfeed
         run: | 
-          cd /home/runner/work/infra-problem/infra-problem/newsfeed
-          pwd        
-          lein deps
-          lein test
+          pwd
+          make test
+          make libs
+          make clean all
+          cd /front-end/public
+          .serve.py
 
       
