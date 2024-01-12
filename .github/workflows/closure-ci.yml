@@ -58,6 +58,8 @@ jobs:
         run: | 
                 pwd
                 ls -lrt
+                cd build
+                ls -lrt
 
         
                 
