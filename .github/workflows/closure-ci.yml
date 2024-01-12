@@ -24,9 +24,9 @@ jobs:
 
     - name: Login to DockerHub
       run: |
-        echo "$DOCKER_USERNAME"
-        echo "$DOCKER_TOKEN"
-        echo "$DOCKER_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
+        echo $DOCKER_USERNAME
+        echo $DOCKER_TOKEN
+        echo $DOCKER_TOKEN | docker login --username $DOCKER_USERNAME --password-stdin
           
     - name: Push docker image      
       run: docker push web-app:latest
