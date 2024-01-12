@@ -6,31 +6,7 @@ on:
       - master
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '11.0.21'
-
-      - name: Install Leiningen
-        run: |
-          wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -O /usr/local/bin/lein
-          sudo chmod +x /usr/local/bin/lein
-
-      - name: Build and Test Common-Utils
-        run: | 
-          cd /home/runner/work/infra-problem/infra-problem/common-utils
-          pwd        
-          lein deps
-          lein test
-
+ 
   newsfeed_build:
     runs-on: ubuntu-latest
 
