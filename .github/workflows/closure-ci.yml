@@ -44,12 +44,20 @@ jobs:
               python3 --version && \
               lein version
 
-      - name: Build and Test Newsfeed
+      - name: Test
         run: | 
                 pwd
                 make test || true
+
+      - name: Build
+        run: | 
                 make libs
                 make clean all
+
+      - name: Build
+        run: | 
+                pwd
+                ls -lrt
 
         
                 
