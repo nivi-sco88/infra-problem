@@ -8,9 +8,7 @@
                  [org.clojars.scsibug/feedparser-clj "0.4.0"]
                  [org.clojure/tools.logging "0.3.1"]
                  [ch.qos.logback/logback-classic "1.1.7"]
-                 [ring/ring-devel "1.4.0"]
-                 [common-utils "0.1.0-SNAPSHOT"]]
-  :checkouts ["/home/runner/work/infra-problem/infra-problem/common-utils"]
+                 [ring/ring-devel "1.4.0"]]
   :main ^:skip-aot newsfeed.core
   :target-path "target/%s"
   :resource-paths ["resources/"]
