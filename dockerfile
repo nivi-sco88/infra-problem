@@ -29,8 +29,8 @@ RUN git clone https://github.com/nivi-sco88/infra-problem.git .
 
 # Run any build commands specific to your project
 RUN pwd
-RUN make test || true
 RUN make libs
+RUN make test
 RUN make clean all
 
 # Your application's command to start
