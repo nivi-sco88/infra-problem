@@ -16,7 +16,7 @@ jobs:
     - name: Build Docker image
       run: |
         docker build -t web-app:latest .
-        docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
+        echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
         docker push web-app:latest
 
     - name: Run Docker container
