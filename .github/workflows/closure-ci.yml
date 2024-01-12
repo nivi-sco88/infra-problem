@@ -60,10 +60,24 @@ jobs:
             name: web-app
             path: /home/runner/work/infra-problem/infra-problem/build/
 
-      - name: Static-assets
-        run: | 
-                cd /home/runner/work/infra-problem/infra-problem/front-end/public
-                ./serve.py
+      - name: Download JAR artifact
+        uses: actions/download-artifact@v2
+        with:
+            name: web-app
+            path: /home/runner/work/infra-problem/infra-problem/build/
+      
+      - name: Build Docker image
+        run: |
+              docker build -t docker-app:$GITHUB_RUN_NUMBER .
+              docker tag docker-app:$GITHUB_RUN_NUMBER docker-app:latest
+      
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+      
+      - name: Push Docker image to Docker Hub
+        run: |
+              docker push docker-app:$GITHUB_RUN_NUMBER
+              docker push docker-app:latest
 
         
                 
