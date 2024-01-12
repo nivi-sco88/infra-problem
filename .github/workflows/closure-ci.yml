@@ -54,7 +54,13 @@ jobs:
                 make libs
                 make clean all
 
-      - name: Build
+      - name: Upload static site content
+        uses: actions/upload-artifact@v3
+        with:
+            name: web-app
+            path: .build/
+
+      - name: Debug
         run: | 
                 pwd
                 ls -lrt
