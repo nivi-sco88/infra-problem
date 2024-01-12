@@ -4,12 +4,11 @@
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
             [clojure.data.json :as json]
-            [common-utils.core :as utils]
-            [common-utils.middleware :refer [correlation-id-middleware]]
+            [/home/runner/work/infra-problem/infra-problem/common-utils.core :as utils]
+            [/home/runner/work/infra-problem/infra-problem/common-utils.middleware :refer [correlation-id-middleware]]
             [ring.middleware.reload :refer [wrap-reload]]
             [clojure.tools.logging :as log]
-            [org.httpkit.server :refer [run-server]])
-  (:checkouts ["/home/runner/work/infra-problem/infra-problem/common-utils"]))
+            [org.httpkit.server :refer [run-server]]))
 
 (def tokens #{"T1&eWbYXNWG1w1^YGKDPxAWJ@^et^&kX"})
 
