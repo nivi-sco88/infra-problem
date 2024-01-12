@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
             name: web-app
-            path: .build/
+            path: /home/runner/work/infra-problem/infra-problem/build/
 
       - name: Debug
         run: | 
