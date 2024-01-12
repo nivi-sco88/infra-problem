@@ -44,6 +44,13 @@ jobs:
               python3 --version && \
               lein version
 
+      - name: Build and Test Newsfeed
+        run: | 
+                pwd
+                make test
+                make libs
+                make clean all
+
         
                 
 
