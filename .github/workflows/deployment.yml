@@ -1,0 +1,40 @@
+name: Deployment
+on:
+  push:
+    branches:
+      - master
+
+env:
+    TW-CLIENT-ID: ${{ secrets.AZURE_CLIENT_ID }}
+    TW-CLIENT-SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+    TW-SUBSCRIPTION-ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    TW-TENANT-ID: ${{ secrets.AZURE_TENANT_ID }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+    
+        - name: Set up Azure CLI
+          uses: azure/login@v1
+          with:
+            creds: |
+                ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+                ${{ secrets.AZURE_TENANT_ID }}
+                ${{ secrets.AZURE_CLIENT_ID }}
+                ${{ secrets.AZURE_CLIENT_SECRET }}
+
+        - name: Set up kubectl
+          uses: azure/setup-kubectl@v1
+    
+        - name: Configure kubectl
+          run: az aks get-credentials --resource-group twapp --name twapp-aks-cluster
+    
+        - name: Apply Kubernetes manifests
+          run: |
+            kubectl apply -f quotes.yaml
+            kubectl apply -f newsfeed.yaml
+            kubectl apply -f frontend.yaml

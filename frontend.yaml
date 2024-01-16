@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: docker.io/nivisco88/tw-app:version68
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 8000
+        env:
+        - name: APP_PORT
+          value: "8080"
+        - name: STATIC_URL
+          value: "http://0.0.0.0:8000"
+        - name: QUOTE_SERVICE_URL
+          value: "http://127.0.0.1:54951"
+        - name: NEWSFEED_SERVICE_URL
+          value: "http://127.0.0.1:54915"
+        - name: NEWSFEED_SERVICE_TOKEN
+          value: "T1&eWbYXNWG1w1^YGKDPxAWJ@^et^&kX"
+        command:
+          - "/bin/sh"
+          - "-c"
+          - |
+            cd front-end/public
+            ./serve.py
+            java -jar front-end.jar
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: NodePort

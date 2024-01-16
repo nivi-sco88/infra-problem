@@ -1,0 +1,51 @@
+# all-services.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quotes-deployment
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: quotes
+  template:
+    metadata:
+      labels:
+        app: quotes
+    spec:
+      containers:
+      - name: tw-app-q
+        image: docker.io/nivisco88/tw-app:version68
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 8080
+        env:
+        - name: APP_PORT
+          value: "8080"
+        command: ["java -jar quotes.jar"]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quotes
+spec:
+  selector:
+    app: quotes
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---

@@ -33,6 +33,4 @@ RUN make libs
 RUN make test
 RUN make clean all
 
-# Your application's command to start
-CMD ["./front-end/public/serve.py"]
 

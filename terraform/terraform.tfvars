@@ -1,0 +1,5 @@
+twappname              = "twapp"
+location               = "East US"
+service_principal_name = "twapp-spn"
+keyvault_name          = "vault"
+registry_name          = "contregistry"
