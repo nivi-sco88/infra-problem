@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: docker.io/nivisco88/tw-app:version68
+        image: docker.io/nivisco88/tw-app:manual
         resources:
           requests:
             cpu: 100m
@@ -29,9 +29,10 @@ spec:
             memory: 100Mi
         ports:
         - containerPort: 8000
+        - containerPort: 8080
         env:
         - name: APP_PORT
-          value: "8080"
+          value: "8000"
         - name: STATIC_URL
           value: "http://0.0.0.0:8000"
         - name: QUOTE_SERVICE_URL
@@ -41,23 +42,27 @@ spec:
         - name: NEWSFEED_SERVICE_TOKEN
           value: "T1&eWbYXNWG1w1^YGKDPxAWJ@^et^&kX"
         command:
-          - "/bin/sh"
-          - "-c"
-          - |
-            cd front-end/public
-            ./serve.py
-            java -jar front-end.jar
+          - "./front-end/public/serve.py"
+          - "java"
+          - "-jar"
+          - "build/front-end.jar"
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: frontend-service
 spec:
   selector:
     app: frontend
   ports:
-    - protocol: TCP
-      port: 80
+    - name: port1
+      protocol: TCP
+      port: 8000
       targetPort: 8000
-  type: NodePort
+    - name: port2
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+  loadBalancerIP: 20.47.65.41

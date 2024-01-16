@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: tw-app-q
-        image: docker.io/nivisco88/tw-app:version68
+        image: docker.io/nivisco88/tw-app:manual
         resources:
           requests:
             cpu: 100m
@@ -29,11 +29,14 @@ spec:
             cpu: 100m
             memory: 100Mi
         ports:
-        - containerPort: 8080
+        - containerPort: 8082
         env:
         - name: APP_PORT
-          value: "8080"
-        command: ["java -jar quotes.jar"]
+          value: "8082"
+        command:
+          - "java"
+          - "-jar"
+          - "build/quotes.jar"
 
 ---
 apiVersion: v1
@@ -45,7 +48,8 @@ spec:
     app: quotes
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 8080
+      port: 8082
+      targetPort: 8082
+  type: ClusterIP
 
 ---

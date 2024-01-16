@@ -4,7 +4,8 @@ RUN apt-get update && \
     apt-get install -y \
     python3 \
     python3-pip \
-    openjdk-11-jdk
+    openjdk-11-jdk \
+    inetutils-ping
 
 RUN apt-get install -y curl && \
     curl -o /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein && \
@@ -19,7 +20,7 @@ RUN java -version && \
     python3 --version && \
     lein version
 
-WORKDIR /project/wepapp
+WORKDIR /project/webapp
 
 # Install git
 RUN apt-get update && apt-get install -y git
@@ -32,5 +33,7 @@ RUN pwd
 RUN make libs
 RUN make test
 RUN make clean all
+
+ENTRYPOINT [ "/bin/bash" ]
 
 
