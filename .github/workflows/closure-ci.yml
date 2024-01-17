@@ -81,7 +81,7 @@ jobs:
             uses: azure/setup-kubectl@v1
       
           - name: Configure kubectl
-            run: az aks get-credentials --resource-group twapp --name twapp-aks-cluster
+            run: az aks get-credentials --resource-group twapp --name aks-cluster
       
           - name: Apply Kubernetes manifests
             run: |
