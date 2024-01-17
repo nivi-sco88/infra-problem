@@ -1,4 +1,4 @@
-name: Deploy quotes
+name: Deploy Frontend
 on:
     workflow_dispatch:
   
