@@ -6,6 +6,7 @@ resource "azurerm_resource_group" "twapp" {
 }
 
 resource "azurerm_kubernetes_cluster" "aks-cluster" {
+  depends_on = [ azurerm_public_ip.aks-public-ip ]
   name                  = var.aks_cluster_name
   location              = azurerm_resource_group.twapp.location
   resource_group_name   = azurerm_resource_group.twapp.name
