@@ -35,3 +35,19 @@ variable "client_secret" {
 variable "tenant_id" {
     type = string
 }
+
+variable "aks_cluster_name" {
+    type = string
+}
+
+variable "node_count" {
+  type = number
+}
+
+variable "username" {
+  type = string
+}
+
+variable "ssh_key_name" {
+  type = string
+}

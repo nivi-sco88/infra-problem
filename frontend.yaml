@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: docker.io/nivisco88/tw-app:manual
+        image: docker.io/nivisco88/tw-app:latest
         resources:
           requests:
             cpu: 100m
@@ -36,9 +36,9 @@ spec:
         - name: STATIC_URL
           value: "http://0.0.0.0:8000"
         - name: QUOTE_SERVICE_URL
-          value: "http://127.0.0.1:54951"
+          value: $AKS_EXTERNAL_IP:8081
         - name: NEWSFEED_SERVICE_URL
-          value: "http://127.0.0.1:54915"
+          value: $AKS_EXTERNAL_IP:8082
         - name: NEWSFEED_SERVICE_TOKEN
           value: "T1&eWbYXNWG1w1^YGKDPxAWJ@^et^&kX"
         command:
@@ -46,6 +46,14 @@ spec:
           - "java"
           - "-jar"
           - "build/front-end.jar"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: external-ip-config
+data:
+  EXTERNAL_IP: $AKS_EXTERNAL_IP
 
 ---
 apiVersion: v1
@@ -65,4 +73,3 @@ spec:
       port: 8080
       targetPort: 8080
   type: LoadBalancer
-  loadBalancerIP: 20.47.65.41

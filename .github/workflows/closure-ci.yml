@@ -5,6 +5,12 @@ on:
     branches:
       - master
 
+env:
+      TW-CLIENT-ID: ${{ secrets.AZURE_CLIENT_ID }}
+      TW-CLIENT-SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      TW-SUBSCRIPTION-ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      TW-TENANT-ID: ${{ secrets.AZURE_TENANT_ID }}
+
 jobs:
   build:
 
@@ -17,7 +23,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t nivisco88/tw-app:version${{ github.run_number }} .
+        docker build -t nivisco88/tw-app:latest .
 
     - name: Login to Docker Hub
       uses: docker/login-action@v2
@@ -26,10 +32,10 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           
     - name: Push docker image      
-      run: docker push nivisco88/tw-app:version${{ github.run_number }}
+      run: docker push nivisco88/tw-app:latest
 
   Create_Azure_Infra:
-        
+        needs: build
         runs-on: ubuntu-latest
     
         steps:
@@ -55,3 +61,90 @@ jobs:
     #- name: Terraform Apply
     # if: github.ref == 'refs/heads/"master"' && github.event_name == 'push'
     #run: terraform apply -auto-approve -input=false
+
+  deploy_quotes:
+      needs: Create_Azure_Infra
+      runs-on: ubuntu-latest
+  
+      steps:
+          - name: Checkout code
+            uses: actions/checkout@v2
+      
+          - name: Set up Azure CLI
+            uses: azure/login@v1
+            with:
+              creds: |
+                  ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+                  ${{ secrets.AZURE_TENANT_ID }}
+                  ${{ secrets.AZURE_CLIENT_ID }}
+                  ${{ secrets.AZURE_CLIENT_SECRET }}
+  
+          - name: Set up kubectl
+            uses: azure/setup-kubectl@v1
+      
+          - name: Configure kubectl
+            run: az aks get-credentials --resource-group twapp --name twapp-aks-cluster
+      
+          - name: Apply Kubernetes manifests
+            run: |
+              kubectl apply -f quotes.yaml
+
+  deploy_newsfeed:
+      needs: deploy_quotes
+      runs-on: ubuntu-latest
+            
+      steps:
+                    - name: Checkout code
+                      uses: actions/checkout@v2
+                
+                    - name: Set up Azure CLI
+                      uses: azure/login@v1
+                      with:
+                        creds: |
+                            ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+                            ${{ secrets.AZURE_TENANT_ID }}
+                            ${{ secrets.AZURE_CLIENT_ID }}
+                            ${{ secrets.AZURE_CLIENT_SECRET }}
+            
+                    - name: Set up kubectl
+                      uses: azure/setup-kubectl@v1
+                
+                    - name: Configure kubectl
+                      run: az aks get-credentials --resource-group twapp --name twapp-aks-cluster
+                
+                    - name: Apply Kubernetes manifests
+                      run: |
+                        kubectl apply -f newsfeed.yaml
+
+  deploy_frontend:
+      needs: deploy_newsfeed
+      runs-on: ubuntu-latest
+                                
+      steps:
+                - name: Checkout code
+                  uses: actions/checkout@v2
+                                    
+                - name: Set up Azure CLI
+                  uses: azure/login@v1
+                  with:
+                      creds: |
+                            ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+                            ${{ secrets.AZURE_TENANT_ID }}
+                            ${{ secrets.AZURE_CLIENT_ID }}
+                            ${{ secrets.AZURE_CLIENT_SECRET }}
+                                
+                - name: Set up kubectl
+                  uses: azure/setup-kubectl@v1
+                                    
+                - name: Configure kubectl
+                  run: az aks get-credentials --resource-group twapp --name twapp-aks-cluster
+                - name: Fetch external IP of aks cluster
+                  run: |
+                      RESOURCE_GROUP=twapp
+                      AKS_CLUSTER_NAME=twapp_aks
+                  
+                      AKS_EXTERNAL_IP=$(az aks show --resource-group $RESOURCE_GROUP --name $AKS_CLUSTER_NAME --query 'addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName' -o tsv)                
+                
+                - name: Apply Kubernetes manifests
+                  run: |
+                        kubectl apply -f frontend.yaml

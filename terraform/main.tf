@@ -1,43 +1,57 @@
 data "azuread_client_config" "current" {}
 
-resource "azurerm_key_vault" "vault" {
-  name                       = var.keyvault_name
-  resource_group_name        = var.twappname
-  location                   = var.location
-  sku_name                   = "standard"
-  tenant_id                  = data.azuread_client_config.current.tenant_id
-  soft_delete_retention_days = 7
-  enable_rbac_authorization  = true
+resource "azurerm_resource_group" "twapp" {
+  name     = var.twappname
+  location = var.location
 }
 
-resource "azurerm_key_vault_access_policy" "example_policy" {
-  key_vault_id = azurerm_key_vault.vault.id
+resource "azurerm_kubernetes_cluster" "aks-cluster" {
+  name                  = var.aks_cluster_name
+  location              = azurerm_resource_group.twapp.location
+  resource_group_name   = azurerm_resource_group.twapp.name
+  dns_prefix            = "${azurerm_resource_group.twapp.name}-cluster"           
+  
+  identity {
+    type = "SystemAssigned"
+  }
 
-  tenant_id = data.azuread_client_config.current.tenant_id
-  object_id = data.azuread_client_config.current.object_id
+  default_node_pool {
+    name       = "agentpool"
+    vm_size    = "Standard_D2s_v3"
+    node_count = var.node_count
+     } 
 
+    linux_profile {
+      admin_username = var.username
+
+      ssh_key {
+        key_data = jsondecode(azapi_resource_action.ssh_public_key_gen.output).publicKey
+      }
+    }
+
+  network_profile {
+      network_plugin = "kubenet"
+      load_balancer_sku = "standard"
+      outbound_type      = "loadBalancer"
+      load_balancer_profile {
+        outbound_ip_address_ids = [azurerm_public_ip.aks-public-ip.id]
+  }
+  }
+    
+  }
+
+resource "azurerm_public_ip" "aks-public-ip" {
+    name                = "aks-public-ip"
+    resource_group_name = azurerm_resource_group.twapp.name
+    allocation_method   = "Static"
+    sku                 = "Standard"
+    location = azurerm_resource_group.twapp.location
 }
 
-resource "azurerm_key_vault_secret" "name" {
-  name         = var.client_id
-  value        = var.client_secret
-  key_vault_id = azurerm_key_vault.vault.id
-}
-
-resource "azurerm_container_registry" "twapp-reg" {
-  name                = var.registry_name
-  resource_group_name = var.twappname
-  location            = var.location
-  sku                 = "Basic"
-}
-
-#create Azure Kubernetes Service
-module "aks" {
-  source                 = "./aks/"
-  client_id              = var.client_id
-  client_secret          = var.client_secret
-  location               = var.location
-  resource_group_name    = var.twappname
-  service_principal_name = var.client_id
-
+resource "azurerm_kubernetes_cluster_node_pool" "aks-cluster-node-pool" {
+  name                 = "agentpool"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.aks-cluster.id
+  vm_size              = "Standard_D2s_v3"
+  node_count           = var.node_count
+  orchestrator_version = azurerm_kubernetes_cluster.aks-cluster.kubernetes_version
 }
