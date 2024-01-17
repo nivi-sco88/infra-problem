@@ -1,9 +1,7 @@
 name: Docker Build
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
 env:
       TW-CLIENT-ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -33,86 +31,3 @@ jobs:
           
     - name: Push docker image      
       run: docker push nivisco88/tw-app:latest
-
-  
-
-  deploy_quotes:
-      needs: build
-      runs-on: ubuntu-latest
-  
-      steps:
-          - name: Checkout code
-            uses: actions/checkout@v2
-      
-          - name: Set up Azure CLI
-            uses: azure/login@v1
-            with:
-              creds: ${{ secrets.AZURE_CREDENTIALS }}
-          - name: Set up kubectl
-            uses: azure/setup-kubectl@v1
-      
-          - name: Configure kubectl
-            run: az aks get-credentials --resource-group twapp --name twapp_aks
-      
-          - name: Apply Kubernetes manifests
-            run: |
-              kubectl apply -f quotes.yaml
-
-  deploy_newsfeed:
-      needs: deploy_quotes
-      runs-on: ubuntu-latest
-            
-      steps:
-                    - name: Checkout code
-                      uses: actions/checkout@v2
-                
-                    - name: Set up Azure CLI
-                      uses: azure/login@v1
-                      with:
-                        creds: ${{ secrets.AZURE_CREDENTIALS }}
-                            
-                    - name: Set up kubectl
-                      uses: azure/setup-kubectl@v1
-                
-                    - name: Configure kubectl
-                      run: az aks get-credentials --resource-group twapp --name twapp_aks
-                
-                    - name: Apply Kubernetes manifests
-                      run: |
-                        kubectl apply -f newsfeed.yaml
-                        if [ $? -eq 0 ]; then
-                        echo "Terraform apply succeeded."
-                        else
-                        echo "Terraform apply failed. Clean up"
-                        terraform destroy -auto-approve
-                        fi
-
-  deploy_frontend:
-      needs: deploy_newsfeed
-      runs-on: ubuntu-latest
-                                
-      steps:
-                - name: Checkout code
-                  uses: actions/checkout@v2
-                                    
-                - name: Set up Azure CLI
-                  uses: azure/login@v1
-                  with:
-                      creds: ${{ secrets.AZURE_CREDENTIALS }}
-                                
-                - name: Set up kubectl
-                  uses: azure/setup-kubectl@v1
-                                    
-                - name: Configure kubectl
-                  run: az aks get-credentials --resource-group twapp --name twapp_aks
-                - name: Fetch external IP of aks cluster
-                  run: |
-                      RESOURCE_GROUP=twapp
-                      AKS_CLUSTER_NAME=twapp_aks
-                  
-                      AKS_EXTERNAL_IP=$(az aks show --resource-group $RESOURCE_GROUP --name $AKS_CLUSTER_NAME --query 'addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName' -o tsv)                
-                
-                - name: Apply Kubernetes manifests
-                  run: |
-                        kubectl apply -f secrets.yaml
-                        kubectl apply -f frontend.yaml

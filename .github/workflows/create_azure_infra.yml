@@ -39,3 +39,9 @@ jobs:
               run: |
                 cd terraform
                 terraform apply -auto-approve -input=false
+                if [ $? -eq 0 ]; then
+                echo "Terraform apply succeeded."
+                else
+                echo "Terraform apply failed. Clean up"
+                terraform destroy -auto-approve
+                fi

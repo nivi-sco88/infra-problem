@@ -1,0 +1,39 @@
+name: Deploy quotes
+on:
+    workflow_dispatch:
+  
+env:
+        TW-CLIENT-ID: ${{ secrets.AZURE_CLIENT_ID }}
+        TW-CLIENT-SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        TW-SUBSCRIPTION-ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        TW-TENANT-ID: ${{ secrets.AZURE_TENANT_ID }}
+
+jobs:
+    deploy_frontend:
+        runs-on: ubuntu-latest
+                                  
+        steps:
+                  - name: Checkout code
+                    uses: actions/checkout@v2
+                                      
+                  - name: Set up Azure CLI
+                    uses: azure/login@v1
+                    with:
+                        creds: ${{ secrets.AZURE_CREDENTIALS }}
+                                  
+                  - name: Set up kubectl
+                    uses: azure/setup-kubectl@v1
+                                      
+                  - name: Configure kubectl
+                    run: az aks get-credentials --resource-group twapp --name twapp_aks
+                  - name: Fetch external IP of aks cluster
+                    run: |
+                        RESOURCE_GROUP=twapp
+                        AKS_CLUSTER_NAME=twapp_aks
+                    
+                        AKS_EXTERNAL_IP=$(az aks show --resource-group $RESOURCE_GROUP --name $AKS_CLUSTER_NAME --query 'addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName' -o tsv)                
+                  
+                  - name: Apply Kubernetes manifests
+                    run: |
+                          kubectl create -f secrets.yaml
+                          kubectl apply -f frontend.yaml
