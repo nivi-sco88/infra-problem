@@ -1,0 +1,41 @@
+name: Create Azure Infra
+on:
+    workflow_dispatch:
+  
+env:
+        TW-CLIENT-ID: ${{ secrets.AZURE_CLIENT_ID }}
+        TW-CLIENT-SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        TW-SUBSCRIPTION-ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        TW-TENANT-ID: ${{ secrets.AZURE_TENANT_ID }}
+  
+jobs:
+
+    Create_Azure_Infra:
+        runs-on: ubuntu-latest
+
+        steps:
+
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Azure login
+              uses: azure/login@v1
+              with:
+                creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+            - name: Terraform Init
+              run: |
+                cd terraform
+                terraform init
+
+      # Generates an execution plan for Terraform
+            - name: Terraform Plan
+              run: |
+                cd terraform
+                terraform plan -input=false
+
+            - name: Terraform Apply
+              run: |
+                cd terraform
+                terraform apply -auto-approve -input=false
