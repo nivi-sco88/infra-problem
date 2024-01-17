@@ -20,6 +20,12 @@ jobs:
               with:
                 creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+            - name: Download Terraform state
+              uses: actions/download-artifact@v2
+              with:
+                  name: terraform-state
+              
+
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
             - name: Terraform Destroy
               run: |
