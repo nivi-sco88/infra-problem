@@ -52,7 +52,7 @@ jobs:
             uses: azure/setup-kubectl@v1
       
           - name: Configure kubectl
-            run: az aks get-credentials --resource-group twapp --name aks-cluster
+            run: az aks get-credentials --resource-group twapp --name twapp_aks
       
           - name: Apply Kubernetes manifests
             run: |
@@ -75,7 +75,7 @@ jobs:
                       uses: azure/setup-kubectl@v1
                 
                     - name: Configure kubectl
-                      run: az aks get-credentials --resource-group twapp --name aks-cluster
+                      run: az aks get-credentials --resource-group twapp --name twapp_aks
                 
                     - name: Apply Kubernetes manifests
                       run: |
@@ -104,7 +104,7 @@ jobs:
                   uses: azure/setup-kubectl@v1
                                     
                 - name: Configure kubectl
-                  run: az aks get-credentials --resource-group twapp --name aks-cluster
+                  run: az aks get-credentials --resource-group twapp --name twapp_aks
                 - name: Fetch external IP of aks cluster
                   run: |
                       RESOURCE_GROUP=twapp
