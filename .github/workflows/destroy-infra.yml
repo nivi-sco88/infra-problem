@@ -10,7 +10,7 @@ env:
   
 jobs:
 
-    Create_Azure_Infra:
+    Destroy_Azure_Infra:
         runs-on: ubuntu-latest
 
         steps:
