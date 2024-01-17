@@ -29,7 +29,7 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
       }
     }
 
-  network_profile {
+    network_profile {
       network_plugin = "kubenet"
       load_balancer_sku = "standard"
       outbound_type      = "loadBalancer"
