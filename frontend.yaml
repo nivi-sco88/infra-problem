@@ -40,7 +40,7 @@ spec:
         - name: NEWSFEED_SERVICE_URL
           value: $AKS_EXTERNAL_IP:8082
         - name: NEWSFEED_SERVICE_TOKEN
-          value: "T1&eWbYXNWG1w1^YGKDPxAWJ@^et^&kX"
+          value: VDEmZVdiWVhOV0cxdzFeWUdLRFB4QVdKQF5ldF4ma1g=
         command:
           - "./front-end/public/serve.py"
           - "java"
