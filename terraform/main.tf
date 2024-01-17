@@ -47,11 +47,3 @@ resource "azurerm_public_ip" "aks-public-ip" {
     sku                 = "Standard"
     location = azurerm_resource_group.twapp.location
 }
-
-resource "azurerm_kubernetes_cluster_node_pool" "aks-cluster-node-pool" {
-  name                 = "agentpool"
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.aks-cluster.id
-  vm_size              = "Standard_D2s_v3"
-  node_count           = var.node_count
-  orchestrator_version = azurerm_kubernetes_cluster.aks-cluster.kubernetes_version
-}
