@@ -15,9 +15,6 @@ jobs:
 
         steps:
 
-            - name: Checkout code
-              uses: actions/checkout@v2
-
             - name: Azure login
               uses: azure/login@v1
               with:
@@ -28,5 +25,4 @@ jobs:
               run: |
                 cd terraform
                 terraform init
-                terraform remote config
                 terraform destroy
