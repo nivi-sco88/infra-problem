@@ -62,6 +62,9 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: twapp
+    service.beta.kubernetes.io/azure-pip-name: aks-public-ip
   name: frontend-service
 spec:
   selector:
