@@ -36,9 +36,9 @@ spec:
         - name: STATIC_URL
           value: "http://0.0.0.0:8000"
         - name: QUOTE_SERVICE_URL
-          value: $AKS_EXTERNAL_IP:8081
+          value: "http://10.244.0.13:8081"
         - name: NEWSFEED_SERVICE_URL
-          value: $AKS_EXTERNAL_IP:8082
+          value: "http://10.244.0.14:8082"
         - name: NEWSFEED_SERVICE_TOKEN
         valueFrom:
           secretKeyRef:
