@@ -27,4 +27,6 @@ jobs:
             - name: Terraform Destroy
               run: |
                 cd terraform
+                terraform init
+                terraform remote config
                 terraform destroy
