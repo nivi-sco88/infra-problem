@@ -1,3 +1,85 @@
+# Let's Begin !!!
+ 
+## CI/CD using Terraform, kubernetes, docker, Azure cloud and Github Actions
+ 
+### Pre-requiste:
+ 
+#### For Code Repository :-
+ 
+Create a account in Github & check in the provided source code
+ 
+----
+ 
+##### For Infrastructure :-
+ 
+Azure Account - For Infrastructure & Deployment
+ 
+----
+ 
+##### For Image Repository :-
+ 
+Use Docker Hub
+ 
+----
+ 
+##### To test the application on local machine, you need to have below packages:-
+ 
+Visual Studio - Code Editor
+ 
+Docker Desktop
+ 
+Minikube
+ 
+JDK 8
+ 
+Clojure
+ 
+Leiningen
+ 
+Terraform
+ 
+ 
+### CI/CD Workflow
+
+ ![Infra_Problem](https://github.com/nivi-sco88/infra-problem/assets/156317432/daf74964-1d28-4980-aaf9-5cbd61f572fb)
+
+
+ 
+### Steps To follow for Build and Deployment
+ 
+Step 1 : Register an App in Azure under App Registrations [twapp]
+
+Step 2 : Create a Secret for that application.
+
+Step 3 : Copy Client ID , Tenant ID , Client Secret and Subscription ID.
+
+Step 4 : Add copied IDs from Step 3 in GitHub Repository Secrets under repo Settings.
+
+Step 5 : Add Docker Hub Credentials in Github Repository Secrets under repo Settings.
+
+Step 6 : Create storage account & Container in Azure to store Terraform state file.
+
+Step 7 : Add Azure Storage Secret to ithub Repository Secrets under repo Settings.
+ 
+### Run Github Actions workflows in below sequence:
+
+1] Docker Build
+
+2] Create Azure Infra
+
+3] Deploy Quotes
+
+4] Deploy Newsfeed
+
+Note: After deployment of quotes and newsfeed service please check and update the URLs provided in frontend.yaml
+
+5] Deploy Frontend
+
+6] Destroy Infra (Optional)
+
+### To access the application check the external IP of the frontend service
+
+----
 # DevOps Assessment
 
 This project contains three services:
