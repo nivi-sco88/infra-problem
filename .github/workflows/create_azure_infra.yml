@@ -45,10 +45,4 @@ jobs:
                 echo "Terraform apply failed. Clean up"
                 terraform destroy -auto-approve
                 fi
-
-            - name: Upload Terraform state
-              uses: actions/upload-artifact@v2
-              with:
-                name: terraform-state
-                path: terraform/terraform.tfstate
               
