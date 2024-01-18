@@ -1,0 +1,38 @@
+name: Destroy Azure Infra
+on:
+    workflow_dispatch:
+  
+env:
+        TW-CLIENT-ID: ${{ secrets.AZURE_CLIENT_ID }}
+        TW-CLIENT-SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        TW-SUBSCRIPTION-ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        TW-TENANT-ID: ${{ secrets.AZURE_TENANT_ID }}
+  
+jobs:
+
+    Create_Azure_Infra:
+        runs-on: ubuntu-latest
+
+        steps:
+
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Azure login
+              uses: azure/login@v1
+              with:
+                creds: ${{ secrets.AZURE_CREDENTIALS }}
+            - name: Download Terraform State
+              run: |
+                  az storage blob download \
+                    --account-name twappstorageaccount \
+                    --container-name twappcontainer \
+                    --name terraform.tfstate \
+                    --file terraform.tfstate
+              env:
+                  AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+                  
+            - name: Run Terraform Destroy
+              run: |
+                  terraform init
+                  terraform destroy -auto-approve

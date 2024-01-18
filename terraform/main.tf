@@ -48,3 +48,11 @@ resource "azurerm_public_ip" "aks-public-ip" {
     sku                 = "Standard"
     location = azurerm_resource_group.twapp.location
 }
+
+terraform {
+  backend "azurerm" {
+    storage_account_name = "twappstorageaccount"
+    container_name       = "twappcontainer"
+    key                  = "terraform.tfstate"
+  }
+}
