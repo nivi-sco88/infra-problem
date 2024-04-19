@@ -26,7 +26,7 @@ jobs:
                                       
                   - name: Configure kubectl
                     run: az aks get-credentials --resource-group twapp --name twapp_aks
-                  - name: Fetch external IP of aks cluster
+                  - name: Fetch external IP of aks cluster for frontend
                     run: |
                         RESOURCE_GROUP=twapp
                         AKS_CLUSTER_NAME=twapp_aks
